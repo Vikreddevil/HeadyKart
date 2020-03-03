@@ -1,0 +1,30 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:clipToPadding="false"
+        android:padding="12dp"
+        android:id="@+id/product_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:reverseLayout="true"
+        />
+    <!--<com.skydoves.expandablelayout.ExpandableLayout-->
+    <!--android:id="@+id/expandable"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="30dp"-->
+    <!--app:expandable_duration="300"-->
+    <!--app:expandable_isExpanded="false"-->
+    <!--app:expandable_parentLayout="@id/product_recycler_view"-->
+    <!--app:expandable_secondLayout="@layout/layout_second"-->
+    <!--app:expandable_showSpinner="true"-->
+    <!--app:expandable_spinner="@drawable/ic_arrow_down"-->
+    <!--app:expandable_spinner_animate="true"-->
+    <!--app:expandable_spinner_margin="14dp"-->
+    <!--app:expandable_spinner_size="32dp"-->
+    <!--/>-->
+</RelativeLayout>
