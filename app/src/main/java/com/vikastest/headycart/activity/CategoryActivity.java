@@ -1,6 +1,8 @@
 package com.vikastest.headycart.activity;
 
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.vikastest.headycart.R;
+import com.vikastest.headycart.RoomEntities.CategoryRepository;
 import com.vikastest.headycart.adapter.CategoryAdapter;
 import com.vikastest.headycart.model.Category;
 import com.vikastest.headycart.model.ProductList;
@@ -17,6 +20,7 @@ import com.vikastest.headycart.network.RetrofitInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,28 +61,22 @@ public class CategoryActivity extends AppCompatActivity {
 
 
                 if(response.body()!=null){
+                    //Creating/Updating Category Database
+                   updateCategoryDatabase(response.body());
                     if(response.body().getCategoryArrayList()!=null){
                     int i=0;
 
-                    if(ProductList.count(ProductList.class)==0)
-                    {
-                        ProductList productList=response.body();
-                        productList.save();
-                        System.out.println("size is "+productList.getCategoryArrayList().size());
-                    }
 
                         while(i<response.body().getCategoryArrayList().size()){
 
                                 Category category=response.body().getCategoryArrayList().get(i);
                                 categoryArrayList.add(category);
 
-
-
-
-
                             i++;
                         }
-                generateMainCategory();
+
+                        //pick up Main Category from the List
+                            generateMainCategory();
 
                     }
 
@@ -91,15 +89,9 @@ public class CategoryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<ProductList> call, @NonNull Throwable t) {
-                if(ProductList.count(ProductList.class)!=0){
-                    ProductList productList=ProductList.listAll(ProductList.class).get(0);
-                    if(productList!=null&&productList.getCategoryArrayList()!=null)
-                    categoryArrayList.addAll(productList.getCategoryArrayList());
-                    generateMainCategory();
 
-                }
-                else
-                Toast.makeText(CategoryActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+
+                getDatafromDb();
             }
         });
     }
@@ -129,6 +121,49 @@ public class CategoryActivity extends AppCompatActivity {
             i++;
         }
         categoryAdapter.notifyDataSetChanged();
+
+    }
+    private void updateCategoryDatabase(final ProductList productList){
+        final CategoryRepository categoryRepository = CategoryRepository.getInstance(CategoryActivity.this);
+        categoryRepository.getCategoryCount().observe(CategoryActivity.this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer count) {
+
+                if(count!=null)
+                if(count==0){
+
+                    //insert ProductList Object
+                    categoryRepository.insertTask(productList);
+
+
+                }
+                categoryRepository.getCategoryCount().removeObserver(this);
+            }
+        });
+
+    }
+    private void getDatafromDb(){
+
+
+
+        final CategoryRepository categoryRepository = CategoryRepository.getInstance(CategoryActivity.this);
+
+        categoryRepository.getProducts().observe(CategoryActivity.this, new Observer<List<ProductList>>() {
+            @Override
+            public void onChanged(@Nullable List<ProductList> productLists) {
+                if(productLists!=null&&productLists.size()!=0){
+
+                    categoryArrayList.addAll(productLists.get(0).getCategoryArrayList());
+                    generateMainCategory();
+                }
+                else
+                    Toast.makeText(CategoryActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+
+
+
+
+            }
+        });
 
     }
 }

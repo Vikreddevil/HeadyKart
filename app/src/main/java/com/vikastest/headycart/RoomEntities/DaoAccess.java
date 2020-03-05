@@ -9,6 +9,7 @@ import android.arch.persistence.room.Update;
 
 import com.vikastest.headycart.model.ProductList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +24,10 @@ public interface DaoAccess {
 
 
     @Query("SELECT * FROM ProductList")
-    LiveData<List<ProductList>> fetchAllTasks();
+    LiveData<List<ProductList>> fetchAllCategories();
 
-
-    @Query("SELECT * FROM ProductList WHERE id =:taskId")
-    LiveData<ProductList> getTask(int taskId);
-
+    @Query("SELECT COUNT(*) FROM ProductList")
+    LiveData<Integer> getCount();
 
     @Update
     void updateTask(ProductList userProfileEntity);
