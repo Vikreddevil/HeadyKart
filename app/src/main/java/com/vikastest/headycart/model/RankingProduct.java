@@ -11,43 +11,43 @@ import java.io.Serializable;
 public class RankingProduct implements Serializable{
 
     @SerializedName("id")
-    private long product_id;
+    private int product_id;
 
-    private long view_count;
+    private int view_count;
 
-    private long order_count;
+    private int order_count;
 
-    private long shares;
+    private int shares;
 
-    public long getProduct_id() {
+    public int getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(long product_id) {
+    public void setProduct_id(int product_id) {
         this.product_id = product_id;
     }
 
-    public long getView_count() {
+    public int getView_count() {
         return view_count;
     }
 
-    public void setView_count(long view_count) {
+    public void setView_count(int view_count) {
         this.view_count = view_count;
     }
 
-    public long getOrder_count() {
+    public int getOrder_count() {
         return order_count;
     }
 
-    public void setOrder_count(long order_count) {
+    public void setOrder_count(int order_count) {
         this.order_count = order_count;
     }
 
-    public long getShares() {
+    public int getShares() {
         return shares;
     }
 
-    public void setShares(long shares) {
+    public void setShares(int shares) {
         this.shares = shares;
     }
 }

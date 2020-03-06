@@ -2,4 +2,11 @@
     <string name="app_name">HeadyCart</string>
     <string name="color">Color:</string>
     <string name="size">Size:</string>
+    <string name="categories">Categories</string>
+    <string name="exit">Exit</string>
+    <string name="cancel">Cancel</string>
+    <string name="most_viewed_products">Most Viewed Products</string>
+    <string name="most_ordered_products">Most OrdeRed Products</string>
+    <string name="most_shared_products">Most ShaRed Products</string>
+    <string name="ok">Ok</string>
 </resources>

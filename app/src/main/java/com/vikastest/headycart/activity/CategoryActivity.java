@@ -1,6 +1,8 @@
 package com.vikastest.headycart.activity;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import com.vikastest.headycart.RoomEntities.CategoryRepository;
 import com.vikastest.headycart.adapter.CategoryAdapter;
 import com.vikastest.headycart.model.Category;
 import com.vikastest.headycart.model.ProductList;
+import com.vikastest.headycart.model.Ranking;
 import com.vikastest.headycart.network.GetProductList;
 import com.vikastest.headycart.network.RetrofitInstance;
 
@@ -28,23 +31,18 @@ import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    private RecyclerView category_recycler_view;
     private CategoryAdapter categoryAdapter;
     private ArrayList<Category> categoryArrayList;
+    private ArrayList<Ranking> rankingArrayList;
     private ArrayList<Category> mainCategoryArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainCategoryArrayList=new ArrayList<>();
-        category_recycler_view =findViewById(R.id.category_recycler_view);
-        categoryArrayList=new ArrayList<>();
-        categoryAdapter =new CategoryAdapter(CategoryActivity.this,categoryArrayList,mainCategoryArrayList);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        category_recycler_view.setLayoutManager(linearLayoutManager);
-        category_recycler_view.setAdapter(categoryAdapter);
 
+        //initialising arraylist's and setting adapter
+        initialize();
 
 
          /*Create handle for the RetrofitInstance interface*/
@@ -74,11 +72,16 @@ public class CategoryActivity extends AppCompatActivity {
 
                             i++;
                         }
+                        if(response.body().getRankingArrayList()!=null){
+
+                            rankingArrayList.addAll (response.body().getRankingArrayList());
+                        }
 
                         //pick up Main Category from the List
                             generateMainCategory();
 
                     }
+
 
 
 
@@ -129,6 +132,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Integer count) {
 
+
                 if(count!=null)
                 if(count==0){
 
@@ -154,6 +158,7 @@ public class CategoryActivity extends AppCompatActivity {
                 if(productLists!=null&&productLists.size()!=0){
 
                     categoryArrayList.addAll(productLists.get(0).getCategoryArrayList());
+                    rankingArrayList.addAll(productLists.get(0).getRankingArrayList());
                     generateMainCategory();
                 }
                 else
@@ -165,5 +170,42 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initialize(){
+        mainCategoryArrayList=new ArrayList<>();
+        RecyclerView category_recycler_view = findViewById(R.id.category_recycler_view);
+        categoryArrayList=new ArrayList<>();
+        rankingArrayList=new ArrayList<>();
+        categoryAdapter =new CategoryAdapter(CategoryActivity.this,categoryArrayList,mainCategoryArrayList,rankingArrayList);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        category_recycler_view.setLayoutManager(linearLayoutManager);
+
+        //setting adapter
+        category_recycler_view.setAdapter(categoryAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlert();
+    }
+    private void createAlert(){
+        new AlertDialog.Builder(CategoryActivity.this)
+                .setTitle("Exit App")
+                .setMessage("Are you sure you want to exit the application?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(R.string.cancel, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

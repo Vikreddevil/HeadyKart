@@ -3,8 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <android.support.v7.widget.Toolbar
+
+        android:id="@+id/toolbar"
+        app:theme="@style/ToolbarStyle"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:title=""
+        android:title=""
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="@string/categories"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="19sp"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/toolbar"
         android:clipToPadding="false"
         android:padding="12dp"
         android:id="@+id/category_recycler_view"

@@ -1,4 +1,4 @@
-package com.vikastest.headycart.RoomEntities;
+package com.vikastest.headycart.Utils;
 
 import android.arch.persistence.room.TypeConverter;
 

@@ -15,6 +15,11 @@ public class Product implements Serializable{
     public Product(){
 
     }
+    private int view_count;
+
+    private int order_count;
+
+    private int shares;
     @SerializedName("id")
     private int product_id;
 
@@ -68,5 +73,29 @@ public class Product implements Serializable{
 
     public void setTax(Tax tax) {
         this.tax = tax;
+    }
+
+    public int getView_count() {
+        return view_count;
+    }
+
+    public void setView_count(int view_count) {
+        this.view_count = view_count;
+    }
+
+    public int getOrder_count() {
+        return order_count;
+    }
+
+    public void setOrder_count(int order_count) {
+        this.order_count = order_count;
+    }
+
+    public int getShares() {
+        return shares;
+    }
+
+    public void setShares(int shares) {
+        this.shares = shares;
     }
 }

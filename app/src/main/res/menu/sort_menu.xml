@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_most_viewed_products"
+        android:title="@string/most_viewed_products"/>
+
+    <item
+        android:id="@+id/menu_most_ordered_products"
+        android:title="@string/most_ordered_products"/>
+
+    <item
+        android:id="@+id/menu_most_shared_products"
+        android:title="@string/most_shared_products"/>
+
+</menu>

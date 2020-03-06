@@ -7,10 +7,9 @@ import android.arch.persistence.room.TypeConverters;
 
 
 import com.google.gson.annotations.SerializedName;
-import com.vikastest.headycart.RoomEntities.DataConverter;
+import com.vikastest.headycart.Utils.DataConverter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

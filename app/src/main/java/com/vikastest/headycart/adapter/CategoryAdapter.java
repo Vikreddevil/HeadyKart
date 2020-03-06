@@ -13,9 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vikastest.headycart.R;
+import com.vikastest.headycart.Utils.ProductUtil;
 import com.vikastest.headycart.activity.ProductActivity;
 import com.vikastest.headycart.model.Category;
 import com.vikastest.headycart.model.Product;
+import com.vikastest.headycart.model.Ranking;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +32,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
 
     private ArrayList<Category> categoryArrayList;
     private ArrayList<Category> mainCategoryArrayList;
+    private ArrayList<Ranking> rankingArrayList;
     private Context context;
 
 
-    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList, ArrayList<Category> mainCategoryArrayList){
+    public CategoryAdapter(Context context, ArrayList<Category> categoryArrayList, ArrayList<Category> mainCategoryArrayList,ArrayList<Ranking> rankingArrayList){
         this.categoryArrayList=categoryArrayList;
+        this.rankingArrayList=rankingArrayList;
         this.mainCategoryArrayList=mainCategoryArrayList;
         this.context=context;
 
@@ -45,18 +49,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_row, viewGroup,false);
         CategoryAdapter.CustomViewHolder viewHolder = new CategoryAdapter.CustomViewHolder(view);
-
-
-
-
-
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomViewHolder customViewHolder, int i) {
+    public void onBindViewHolder(@NonNull CustomViewHolder customViewHolder,final int i) {
 
         customViewHolder.tv_category_name.setText(mainCategoryArrayList.get(i).getCategory_name());
+
+        //getting Sub Categories
        for(int j=0;j<mainCategoryArrayList.get(i).getChildCategoryList().length;j++) {
            long categoryId=mainCategoryArrayList.get(i).getChildCategoryList()[j];
            Category subCategory=new Category();
@@ -64,8 +65,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
                if(c.getCategory_id()==categoryId){
                    subCategory=c;
                }
-               //something here
            }
+           //creating dynamic text views for Sub Categories
            LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
            TextView tv = new TextView(context);
@@ -84,6 +85,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
                @Override
                public void onClick(View view) {
 
+                   //sending data of selected Sub Category to ProductActivity Class
                    ArrayList<Product> productCategoryArrayList=new ArrayList<>();
 
 
@@ -93,30 +95,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
                        }
                        //something here
                    }
-
+                   productCategoryArrayList= ProductUtil.calculateRankings(productCategoryArrayList,rankingArrayList);
                    Intent intent=new Intent(context, ProductActivity.class);
                    intent.putExtra("product", productCategoryArrayList);
-//                intent.putExtra("product",categoryArrayList.get(i).ge)
+                   intent.putExtra("title",finalSubCategory.getCategory_name());
                    context.startActivity(intent);
                }
            });
 
 
        }
-//        if(!categoryArrayList.get(i).isIs_sub_category()) {
-//            customViewHolder.tv_category_name.setText(categoryArrayList.get(i).getCategory_name());
-//
-//            customViewHolder.tv_category_name.setVisibility(View.VISIBLE);
-//
-//
-//        }
-//        else {
-//
-//
-//
-//            customViewHolder.tv_category_name.setVisibility(View.GONE);
-//        }
-
 
 
 
@@ -130,16 +118,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tv_category_name;
-        private RelativeLayout rl_category;
+
         private LinearLayout ll_sub_categories;
 
 
-        public CustomViewHolder(View view) {
+        CustomViewHolder(View view) {
             super(view);
 
 
             tv_category_name=view.findViewById(R.id.tv_category_name);
-            rl_category=view.findViewById(R.id.rl_category);
             ll_sub_categories=view.findViewById(R.id.ll_sub_categories);
 
 
